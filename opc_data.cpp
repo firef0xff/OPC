@@ -3,7 +3,7 @@
 namespace opc
 {
 
-opc_data::opc_data()
+OpcData::OpcData()
 {
 }
 

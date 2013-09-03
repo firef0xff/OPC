@@ -1,6 +1,6 @@
 #ifndef OPC_DATA_H
 #define OPC_DATA_H
-
+#include <miniOPC.h>
 namespace opc
 {
 
