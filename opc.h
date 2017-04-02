@@ -1,4 +1,4 @@
-
+#ifdef WINDOWS
 
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
@@ -328,7 +328,7 @@ typedef interface IOPCGroupStateMgt2 IOPCGroupStateMgt2;
 extern "C"{
 #endif
 
-void * __RPC_USER MIDL_user_allocate(size_t);
+//void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * );
 
 #ifndef __CATID_OPCDAServer10_INTERFACE_DEFINED__
@@ -4591,5 +4591,5 @@ void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VAR
 #endif
 
 #endif
-
+#endif
 

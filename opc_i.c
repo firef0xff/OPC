@@ -1,4 +1,4 @@
-
+#ifdef WINDOWS
 
 /* this ALWAYS GENERATED file contains the IIDs and CLSIDs */
 
@@ -151,3 +151,4 @@ MIDL_DEFINE_GUID(IID, LIBID_OPCDA,0x3B540B51,0x0378,0x4551,0xAD,0xCC,0xEA,0x9B,0
 
 #endif /* !defined(_M_IA64) && !defined(_M_AMD64)*/
 
+#endif
