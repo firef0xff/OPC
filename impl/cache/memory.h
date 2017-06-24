@@ -1,6 +1,8 @@
 #pragma once
+#ifndef memoryH
+#define memoryH
 #include "cache.h"
-#include "def.h"
+#include "def_opc.h"
 
 namespace memory
 {
@@ -42,3 +44,4 @@ private:
 };
 
 }
+#endif

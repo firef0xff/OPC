@@ -1,4 +1,6 @@
-#pragma once
+﻿#pragma once
+#ifndef win_ole_modeH
+#define win_ole_modeH
 #include "types.h"
 #include "sync_thread.h"
 
@@ -30,9 +32,9 @@ private:
     {
     public:
         Group():
-            pItemMgt( nullptr ),
-            pSyncIO ( nullptr ),
-            pItemResult( nullptr )
+            pItemMgt( 0 ),
+            pSyncIO ( 0 ),
+            pItemResult( 0 )
         {}
         ~Group()
         {
@@ -42,11 +44,11 @@ private:
             }
         }
 
-        IOPCItemMgt		*pItemMgt;		//указатель на Группу адресов с данными
-        IOPCSyncIO  	*pSyncIO;		//Указатель на ентерфейс для синхронизации данных
-        std::vector<OPCITEMDEF> pItems;	//массив с элементами группы
-        OPCITEMRESULT   *pItemResult;	//указатель на элемент
-        size_t			ItemsCount;		//количество элементов в группе
+        IOPCItemMgt     *pItemMgt;      //указатель на Группу адресов с данными
+        IOPCSyncIO      *pSyncIO;       //Указатель на ентерфейс для синхронизации данных
+        std::vector<OPCITEMDEF> pItems; //массив с элементами группы
+        OPCITEMRESULT   *pItemResult;   //указатель на элемент
+        size_t          ItemsCount;     //количество элементов в группе
     };    
     typedef std::unique_ptr< Group > GroupPtr;
     typedef std::vector< GroupPtr > GroupsList;
@@ -83,7 +85,4 @@ private:
 
 }//namespace opc
 #endif
-
-
-
-
+#endif

@@ -1,4 +1,6 @@
 #pragma once
+#ifndef typesH
+#define typesH
 
 namespace opc
 {
@@ -8,4 +10,4 @@ enum types{ tBOOL, tINT, tFLOAT };
 
 }//namespace opc
 
-
+#endif

@@ -1,6 +1,5 @@
-#include "win_ole_mode.h"
+﻿#include "win_ole_mode.h"
 #include "../miniOPC.h"
-#include <QtDebug>
 
 
 #ifdef WINDOWS
@@ -320,7 +319,7 @@ void WinOleMode::LogErrStrong( HRESULT err )
         LPWSTR  ErrorStr = L"";    //текст ошибки
 //        std::cout << std::hex << err << std::endl;
         pIOPCServer->GetErrorString( err, LOCALE_ID, &ErrorStr);
-        qWarning() << ErrorStr;
+//        qWarning() << ErrorStr;
         CoTaskMemFree(ErrorStr);
     }
 }

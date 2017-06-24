@@ -1,3 +1,6 @@
+#pragma once
+#ifndef opcH
+#define opcH
 #ifdef WINDOWS
 
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
@@ -4592,4 +4595,4 @@ void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VAR
 
 #endif
 #endif
-
+#endif

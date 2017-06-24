@@ -1,4 +1,6 @@
-#pragma once
+﻿#ifndef demo_modeH
+#define demo_modeH
+
 #include "types.h"
 #include <memory>
 #include <vector>
@@ -32,9 +34,6 @@ VARIANT vDataValue;
 #include <windows.h>
 #include "../opc.h"
 #endif
-
-
-
 
 namespace opc
 {
@@ -72,3 +71,4 @@ private:
 };
 
 }//namespace opc
+#endif

@@ -1,8 +1,9 @@
 ﻿#pragma once
+#ifndef miniOPCH
+#define miniOPCH
 #include "impl/types.h"
 #include <memory>
 #include <mutex>
-#include <thread>
 
 #ifdef DEMO
 #include "impl/demo_mode.h"
@@ -28,7 +29,6 @@ public:
             while ( !ptr || !ptr->Connected() )
             {
                 ptr.reset( new Server() );
-                std::this_thread::sleep_for( std::chrono::milliseconds(100) );
             }
         }
 
@@ -80,3 +80,4 @@ void    ReadToArray (  VARIANT& variant, T* array, uint32_t size )
 }
 
 }//namespace opc
+#endif

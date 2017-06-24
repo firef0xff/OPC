@@ -1,6 +1,7 @@
 #pragma once
+#ifndef cacheH
+#define cacheH
 #include <map>
-
 
 namespace memory
 {
@@ -46,3 +47,4 @@ protected:
 };
 
 }
+#endif

@@ -1,24 +1,27 @@
 #pragma once
-#include <thread>
-#include <mutex>
-#include <condition_variable>
+#ifndef sync_threadH
+#define sync_threadH
+
+#include <memory>
 #include <functional>
 
 class SyncThread
 {
 public:
-    typedef std::function<void(void)> Function;
+   class Impl;
 
-    SyncThread();
-    ~SyncThread();
+   typedef std::function<void(void)> Function;
 
-    void Start();
-    void Exec( Function func );
+   SyncThread();
+   ~SyncThread();
+
+   void Start();
+   void Exec( Function func );
+
 private:
-    void Run();
-    bool interrupt;
-    std::thread mThread;
-    Function mFunc;
-    std::mutex Mutex;
-    std::condition_variable mRunWaiter;
+   std::unique_ptr<Impl> mImpl;
 };
+
+
+
+#endif
