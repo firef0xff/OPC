@@ -79,5 +79,40 @@ void    ReadToArray (  VARIANT& variant, T* array, uint32_t size )
     miniOPC::Instance().FreeArrayData( variant );
 }
 
+namespace
+{
+
+template <class T>
+types Type();
+
+template <>types Type<float>()
+{
+   return tFLOAT;
+}
+template <>types Type<int>()
+{
+   return tINT;
+}
+template <>types Type<bool>()
+{
+   return tBOOL;
+}
+}
+
+template < class T >
+void    LoadToVariant (  VARIANT& variant, T* array, uint32_t size )
+{
+    T* values = nullptr;
+    opc::miniOPC::Instance().InitArrayData( variant, Type<T>(), size );
+    miniOPC::Instance().GetArrayData( variant, reinterpret_cast<void**>(&values) );
+    if ( values )
+    {
+        for (size_t i = 0; i < size; i++)
+        {
+            values[i] = array[ i ];
+        }
+    }
+}
+
 }//namespace opc
 #endif

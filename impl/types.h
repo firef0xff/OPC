@@ -6,7 +6,7 @@ namespace opc
 {
 
 typedef unsigned long long GROUP_ID;
-enum types{ tBOOL, tINT, tFLOAT };
+enum types{ tBOOL, tINT, tFLOAT, tVARIANT };
 
 }//namespace opc
 

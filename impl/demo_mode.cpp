@@ -12,7 +12,8 @@ static memory::Memory& MEM()
 DemoMode::DemoMode( wchar_t const* )
 {}
 DemoMode::~DemoMode()
-{}
+{
+}
 
 GROUP_ID        DemoMode::AddGroup    ( wchar_t const* pGroupName, wchar_t const* Addresses[], size_t ItemsCount )
 {
@@ -113,8 +114,30 @@ void            DemoMode::GetArrayData( VARIANT& variant, void **values )
 }
 void            DemoMode::FreeArrayData( VARIANT& variant )
 {
-#ifdef WINDOWS
+#ifndef WINDOWS
+   variant.parray.reset();
+#else
     SafeArrayUnaccessData( variant.parray );
+#endif
+}
+void            DemoMode::InitArrayData(VARIANT& variant, types type, size_t size )
+{
+#ifndef WINDOWS
+   switch ( type )
+   {
+   case tBOOL:
+      variant.parray.reset( static_cast<void*>( new bool[size] ) );
+      break;
+   case tFLOAT:
+      variant.parray.reset( static_cast<void*>( new float[size] ) );
+      break;
+   case tINT:
+      variant.parray.reset( static_cast<void*>( new int[size] ) );
+      break;
+   default:
+      break;
+   }
+#else
 #endif
 }
 bool            DemoMode::Connected   ()

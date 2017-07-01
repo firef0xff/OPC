@@ -279,6 +279,11 @@ void    WinOleMode::WriteMassImpl   ( HRESULT &res, GROUP_ID id, size_t pos, siz
                 values[i].fltVal 	= *( static_cast< float* >( item ) + i );
                 break;
             }
+            case tVARIANT:
+            {
+                values[i] = *( static_cast< VARIANT* >( item ) + i );
+                break;
+            }
             default:
             {
                 res = E_FAIL;
@@ -316,7 +321,7 @@ void WinOleMode::LogErrStrong( HRESULT err )
 {    
     if (err)
     {
-        LPWSTR  ErrorStr = L"";    //текст ошибки
+        LPWSTR  ErrorStr = nullptr;    //текст ошибки
 //        std::cout << std::hex << err << std::endl;
         pIOPCServer->GetErrorString( err, LOCALE_ID, &ErrorStr);
 //        qWarning() << ErrorStr;

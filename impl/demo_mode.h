@@ -14,7 +14,7 @@ struct VARIANT
     bool boolVal = false;
     float fltVal = 0.0;
     long lVal    = 0;
-    std::shared_ptr< void > parray;
+    std::shared_ptr<void> parray;
 };
 enum RESULTS : int
 {
@@ -51,6 +51,7 @@ public:
     void            OpcMassFree ( GROUP_ID id, OPCITEMSTATE* mass );
     void            GetArrayData( VARIANT& variant, void **values );
     void            FreeArrayData(VARIANT& variant);
+    void            InitArrayData(VARIANT& variant, types type, size_t size );
     bool            Connected   ();
 
 private:
