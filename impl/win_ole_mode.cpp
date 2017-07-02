@@ -49,12 +49,16 @@ void WinOleMode::Init( wchar_t const* ServerName )
     Groups.clear();
 }
 
+void WinOleMode::DeInit()
+{
+   Groups.clear();
+   if ( pIOPCServer )
+       result = pIOPCServer->Release();
 
+}
 WinOleMode::~WinOleMode()
 {
-    Groups.clear();
-    if ( pIOPCServer )
-        result = pIOPCServer->Release();
+   mThread.Exec( std::bind( &WinOleMode::DeInit, this ) );
 }
 
 GROUP_ID  WinOleMode::AddGroup( wchar_t const* pGroupName, wchar_t const* Addresses[]/*массив второго уровня*/,
@@ -313,7 +317,7 @@ void    WinOleMode::GetArrayData( VARIANT& variant, void **values )
 }
 void    WinOleMode::FreeArrayData( VARIANT& variant )
 {
-   if ( variant.vt == VT_SAFEARRAY )
+   if ( variant.vt == VT_SAFEARRAY || variant.vt & VT_ARRAY )
    {
       SafeArrayUnaccessData( variant.parray );
       SafeArrayDestroy( variant.parray );
@@ -342,12 +346,12 @@ void    WinOleMode::InitArrayData(VARIANT& variant, types type, size_t size )
    {
       SAFEARRAY* ptr = SafeArrayCreateVector( t, 0, size );
       variant.parray = ptr;
-      variant.vt = VT_SAFEARRAY;
+      variant.vt = VT_ARRAY|t;
    }
 }
 void    WinOleMode::DataUnlock     ( VARIANT& variant )
 {
-   if ( variant.vt == VT_SAFEARRAY )
+   if ( variant.vt == VT_SAFEARRAY || variant.vt & VT_ARRAY )
    {
       SafeArrayUnlock( variant.parray );
    }

@@ -133,7 +133,7 @@ void            DemoMode::FreeArrayData( VARIANT& variant )
 #ifndef WINDOWS
    variant.parray.reset();
 #else
-   if ( variant.vt == VT_SAFEARRAY )
+   if ( variant.vt == VT_SAFEARRAY || variant.vt & VT_ARRAY )
    {
       SafeArrayUnaccessData( variant.parray );
       SafeArrayDestroy( variant.parray );
@@ -182,7 +182,7 @@ void            DemoMode::InitArrayData(VARIANT& variant, types type, size_t siz
    {
       SAFEARRAY* ptr = SafeArrayCreateVector( t, 0, size );
       variant.parray = ptr;
-      variant.vt = VT_SAFEARRAY;
+      variant.vt = VT_ARRAY|t;
    }
 
 #endif
@@ -190,7 +190,7 @@ void            DemoMode::InitArrayData(VARIANT& variant, types type, size_t siz
 void            DemoMode::DataLock     ( VARIANT& variant )
 {
 #ifdef WINDOWS
-   if ( variant.vt == VT_SAFEARRAY )
+   if ( variant.vt == VT_SAFEARRAY || variant.vt & VT_ARRAY )
    {
       SafeArrayLock( variant.parray );
    }
@@ -201,7 +201,7 @@ void            DemoMode::DataLock     ( VARIANT& variant )
 void            DemoMode::DataUnlock     ( VARIANT& variant )
 {
 #ifdef WINDOWS
-   if ( variant.vt == VT_SAFEARRAY )
+   if ( variant.vt == VT_SAFEARRAY || variant.vt & VT_ARRAY )
    {
       SafeArrayUnlock( variant.parray );
    }

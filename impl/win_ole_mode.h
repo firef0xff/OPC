@@ -59,6 +59,7 @@ private:
     //функции
 
     void Init           ( wchar_t const* ServerName );
+    void DeInit         ();
     void AddGroupImpl   ( GROUP_ID& id, wchar_t const* pGroupName, wchar_t const* Addresses[], size_t ItemsCount );
     void OpcMassFreeImpl( GROUP_ID id, OPCITEMSTATE* mass);
     void ReadImpl       ( OPCITEMSTATE **res, GROUP_ID id );

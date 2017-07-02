@@ -22,7 +22,7 @@ HEADERS += \
     impl/win_ole_mode.h \
     impl/sync_thread.h
 
-
+OTHER_FILES += ini/*\
 
 win32 {
     DEFINES += WINDOWS

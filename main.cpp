@@ -105,11 +105,11 @@ public:
 
     wchar_t const* mAdresses[ BOOL_COUNT + FLOAT_COUNT ] = {
         //bool
-        L"CPU/DB31.Start_Oper",
-        L"CPU/DB31.Stop_Oper",
-        L"CPU/DB31.Nasos_M2",
+        L"CPU/bool1",
+        L"CPU/bool2",
+        L"CPU/bool3",
 
-        L"CPU/DB31.N_Operation"
+        L"CPU/real4"
     };
 
     uint64_t mGroupID = 0;
@@ -212,9 +212,8 @@ public:
     };
 
     wchar_t const* mAdresses[ ArrayCount ] = {
-        //bool
-        L"CPU/test_array1",
-        L"CPU/test_array2"
+        L"CPU/array1",
+        L"CPU/array2"
     };
 
     uint64_t mGroupID = 0;
@@ -301,7 +300,7 @@ public:
 #endif
 int main()
 {
-    using namespace t3;
+    using namespace t2;
     Test t;
     new std::thread( &Test::Run, &t );
 
