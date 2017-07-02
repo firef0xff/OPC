@@ -24,8 +24,10 @@ public:
     HRESULT         WriteMass   ( GROUP_ID id, size_t pos, size_t mass_len, void *item, types type );
     void            OpcMassFree ( GROUP_ID id, OPCITEMSTATE* mass);
     bool            Connected   ();   
-    void            GetArrayData( VARIANT& variant, void **values );
+    void            GetArrayData (VARIANT& variant, void **values );
     void            FreeArrayData(VARIANT&);
+    void            InitArrayData(VARIANT& variant, types type, size_t size );
+    void            DataUnlock   (VARIANT& variant );
 private:
     //типы
     class Group                 //структура с данными по шруппе ОПС сервера

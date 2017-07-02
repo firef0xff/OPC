@@ -293,7 +293,10 @@ void    WinOleMode::WriteMassImpl   ( HRESULT &res, GROUP_ID id, size_t pos, siz
     }
 
     result = ptr->pSyncIO->Write( mass_len, &(*phServer.begin()), &(*values.begin()), &pWErrors );
-
+    for( size_t i=0; i<values.size(); i++ )
+    {
+        VariantClear( &values[i] );
+    }
     LogErrStrong(result);
 
     res = result;
@@ -310,7 +313,44 @@ void    WinOleMode::GetArrayData( VARIANT& variant, void **values )
 }
 void    WinOleMode::FreeArrayData( VARIANT& variant )
 {
-    SafeArrayUnaccessData( variant.parray );
+   if ( variant.vt == VT_SAFEARRAY )
+   {
+      SafeArrayUnaccessData( variant.parray );
+      SafeArrayDestroy( variant.parray );
+      variant.vt = VT_EMPTY;
+      variant.parray = nullptr;
+   }
+}
+void    WinOleMode::InitArrayData(VARIANT& variant, types type, size_t size )
+{
+   VARENUM t = VT_EMPTY;
+   switch ( type )
+   {
+   case tBOOL:
+      t = VT_BOOL;
+      break;
+   case tFLOAT:
+      t = VT_R4;
+      break;
+   case tINT:
+      t = VT_I4;
+      break;
+   default:
+      break;
+   }
+   if ( size && t != VT_EMPTY  )
+   {
+      SAFEARRAY* ptr = SafeArrayCreateVector( t, 0, size );
+      variant.parray = ptr;
+      variant.vt = VT_SAFEARRAY;
+   }
+}
+void    WinOleMode::DataUnlock     ( VARIANT& variant )
+{
+   if ( variant.vt == VT_SAFEARRAY )
+   {
+      SafeArrayUnlock( variant.parray );
+   }
 }
 bool    WinOleMode::Connected   ()
 {

@@ -31,7 +31,6 @@ win32 {
 
 unix {
     DEFINES -= WINDOWS
-    DEFINES += DEMO
     LIBS += -lpthread
 }
 

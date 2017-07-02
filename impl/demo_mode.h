@@ -14,7 +14,7 @@ struct VARIANT
     bool boolVal = false;
     float fltVal = 0.0;
     long lVal    = 0;
-    std::shared_ptr<void> parray;
+    std::shared_ptr<uint8_t[]> parray;
 };
 enum RESULTS : int
 {
@@ -30,6 +30,8 @@ struct OPCITEMSTATE
 //    WORD wReserved;
 VARIANT vDataValue;
 };
+
+void VarainatCopy(  )
 #else
 #include <windows.h>
 #include "../opc.h"
@@ -52,6 +54,8 @@ public:
     void            GetArrayData( VARIANT& variant, void **values );
     void            FreeArrayData(VARIANT& variant);
     void            InitArrayData(VARIANT& variant, types type, size_t size );
+    void            DataLock     ( VARIANT& variant );
+    void            DataUnlock     ( VARIANT& variant );
     bool            Connected   ();
 
 private:

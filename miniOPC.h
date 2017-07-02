@@ -112,6 +112,7 @@ void    LoadToVariant (  VARIANT& variant, T* array, uint32_t size )
             values[i] = array[ i ];
         }
     }
+    opc::miniOPC::Instance().DataUnlock( variant );
 }
 
 }//namespace opc

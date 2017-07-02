@@ -50,7 +50,7 @@ OPCITEMSTATE*   DemoMode::Read        ( GROUP_ID id )
 
     for ( size_t i = 0; i < ptr->Addresses.size(); ++i )
     {
-        res[i].vDataValue = MEM().Page< VARIANT >().Read( ptr->Addresses[i] );
+        res[i].vDataValue = MEM().Page< VARIANT >().Read( ptr->Addresses[i] );        
     }
     return res;
 }
@@ -76,17 +76,25 @@ HRESULT         DemoMode::WriteMass   ( GROUP_ID id, size_t pos, size_t mass_len
         {
             case tBOOL:
             {
+                value.vt        = VT_BOOL;
                 value.boolVal   = *( static_cast< bool* >( item ) + i );
                 break;
             }
             case tINT:
             {
+                value.vt    = VT_I4;
                 value.lVal  = *( static_cast< int* >( item ) + i );
                 break;
             }
             case tFLOAT:
             {
+                value.vt      = VT_R4;
                 value.fltVal 	= *( static_cast< float* >( item ) + i );
+                break;
+            }
+            case tVARIANT:
+            {                
+                value = *(static_cast< VARIANT* >( item ) + i);
                 break;
             }
             default:
@@ -94,7 +102,11 @@ HRESULT         DemoMode::WriteMass   ( GROUP_ID id, size_t pos, size_t mass_len
                 return E_FAIL;
             }
         }
-        MEM().Page<VARIANT>().Write( ptr->Addresses.at( pos + i), value );
+        auto &page = MEM().Page<VARIANT>();
+        VARIANT old = page.Read( ptr->Addresses.at( pos + i) );
+        FreeArrayData( old );
+        DataLock( value );
+        page.Write( ptr->Addresses.at( pos + i), value );
     }
 
     return S_OK;
@@ -109,7 +121,11 @@ void            DemoMode::GetArrayData( VARIANT& variant, void **values )
 #ifndef WINDOWS
     *values = variant.parray.get();
 #else
-    SafeArrayAccessData( variant.parray, values );
+    auto res = SafeArrayAccessData( variant.parray, values );
+    if ( res ==  E_INVALIDARG )
+       return;
+    if ( res ==  E_UNEXPECTED )
+       return;
 #endif
 }
 void            DemoMode::FreeArrayData( VARIANT& variant )
@@ -117,27 +133,76 @@ void            DemoMode::FreeArrayData( VARIANT& variant )
 #ifndef WINDOWS
    variant.parray.reset();
 #else
-    SafeArrayUnaccessData( variant.parray );
+   if ( variant.vt == VT_SAFEARRAY )
+   {
+      SafeArrayUnaccessData( variant.parray );
+      SafeArrayDestroy( variant.parray );
+      variant.vt = VT_EMPTY;
+      variant.parray = nullptr;
+   }
 #endif
 }
 void            DemoMode::InitArrayData(VARIANT& variant, types type, size_t size )
 {
 #ifndef WINDOWS
+   sigset_t sz = 0;
    switch ( type )
    {
    case tBOOL:
-      variant.parray.reset( static_cast<void*>( new bool[size] ) );
+      sz = size * sizeof(bool);
       break;
    case tFLOAT:
-      variant.parray.reset( static_cast<void*>( new float[size] ) );
+      sz = size * sizeof(float);
       break;
    case tINT:
-      variant.parray.reset( static_cast<void*>( new int[size] ) );
+      sz = size * sizeof(int);
       break;
    default:
       break;
    }
+   if ( sz )
+      variant.parray.reset( new uint8_t[sz] );
 #else
+   VARENUM t = VT_EMPTY;
+   switch ( type )
+   {
+   case tBOOL:
+      t = VT_BOOL;
+      break;
+   case tFLOAT:
+      t = VT_R4;
+      break;
+   case tINT:
+      t = VT_I4;
+      break;
+   default:
+      break;
+   }
+   if ( size && t != VT_EMPTY  )
+   {
+      SAFEARRAY* ptr = SafeArrayCreateVector( t, 0, size );
+      variant.parray = ptr;
+      variant.vt = VT_SAFEARRAY;
+   }
+
+#endif
+}
+void            DemoMode::DataLock     ( VARIANT& variant )
+{
+#ifdef WINDOWS
+   if ( variant.vt == VT_SAFEARRAY )
+   {
+      SafeArrayLock( variant.parray );
+   }
+#endif
+}
+void            DemoMode::DataUnlock     ( VARIANT& variant )
+{
+#ifdef WINDOWS
+   if ( variant.vt == VT_SAFEARRAY )
+   {
+      SafeArrayUnlock( variant.parray );
+   }
 #endif
 }
 bool            DemoMode::Connected   ()
