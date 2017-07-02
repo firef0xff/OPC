@@ -9,12 +9,20 @@
 
 #ifndef WINDOWS
 typedef int HRESULT;
+enum VARIANT_TYPE
+{
+   VT_BOOL,
+   VT_I4,
+   VT_R4,
+
+};
 struct VARIANT
 {
-    bool boolVal = false;
-    float fltVal = 0.0;
-    long lVal    = 0;
-    std::shared_ptr<uint8_t[]> parray;
+   VARIANT_TYPE vt;
+   bool boolVal = false;
+   float fltVal = 0.0;
+   long lVal    = 0;
+   std::shared_ptr<uint8_t> parray;
 };
 enum RESULTS : int
 {
@@ -31,7 +39,6 @@ struct OPCITEMSTATE
 VARIANT vDataValue;
 };
 
-void VarainatCopy(  )
 #else
 #include <windows.h>
 #include "../opc.h"

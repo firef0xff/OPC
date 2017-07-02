@@ -145,7 +145,7 @@ void            DemoMode::FreeArrayData( VARIANT& variant )
 void            DemoMode::InitArrayData(VARIANT& variant, types type, size_t size )
 {
 #ifndef WINDOWS
-   sigset_t sz = 0;
+   size_t sz = 0;
    switch ( type )
    {
    case tBOOL:
@@ -161,7 +161,7 @@ void            DemoMode::InitArrayData(VARIANT& variant, types type, size_t siz
       break;
    }
    if ( sz )
-      variant.parray.reset( new uint8_t[sz] );
+      variant.parray = std::shared_ptr<uint8_t>(new uint8_t[size], std::default_delete<uint8_t[]>());
 #else
    VARENUM t = VT_EMPTY;
    switch ( type )
@@ -194,6 +194,8 @@ void            DemoMode::DataLock     ( VARIANT& variant )
    {
       SafeArrayLock( variant.parray );
    }
+#else
+   (void)variant;
 #endif
 }
 void            DemoMode::DataUnlock     ( VARIANT& variant )
@@ -203,6 +205,8 @@ void            DemoMode::DataUnlock     ( VARIANT& variant )
    {
       SafeArrayUnlock( variant.parray );
    }
+#else
+   (void)variant;
 #endif
 }
 bool            DemoMode::Connected   ()

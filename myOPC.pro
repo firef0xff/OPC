@@ -32,6 +32,7 @@ win32 {
 unix {
     DEFINES -= WINDOWS
     LIBS += -lpthread
+   DEFINES += DEMO
 }
 
 debug {

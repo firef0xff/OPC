@@ -2,6 +2,7 @@
 #include "miniOPC.h"
 #include "impl/sync_thread.h"
 #include <thread>
+#include <cstring>
 
 namespace t1
 {
@@ -37,13 +38,13 @@ public:
             std::cout << "write time msec: " << mcs << std::endl;
 
             start = std::chrono::system_clock::now();
-            Read( false );
+            Read( true );
             end = std::chrono::system_clock::now();
             mcs = std::chrono::duration_cast< std::chrono::microseconds > ( end - start ).count();
             std::cout << "read time msec: " << mcs << std::endl;
             Write3();
             Read();
-            //--i;
+//            --i;
 //            std::this_thread::sleep_for(std::chrono::milliseconds(500));
         }
     }
@@ -257,6 +258,7 @@ public:
 };
 }
 
+#ifdef WINDOWS
 namespace t4
 {
 class Test //тест выделения памяти под варианты
@@ -296,9 +298,10 @@ public:
    }
 };
 }
+#endif
 int main()
 {
-    using namespace t2;
+    using namespace t3;
     Test t;
     new std::thread( &Test::Run, &t );
 
