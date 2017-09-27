@@ -22,16 +22,12 @@ public:
     static Server& Instance()
     {
         static std::unique_ptr< Server > ptr;
-        if ( !ptr || !ptr->Connected() )
+        static std::mutex m;
+        std::lock_guard< std::mutex > lock( m );
+        if( !ptr || !ptr->Connected() )
         {
-            static std::mutex m;
-            std::lock_guard< std::mutex > lock( m );
-            while ( !ptr || !ptr->Connected() )
-            {
-                ptr.reset( new Server() );
-            }
+            ptr.reset( new Server() );
         }
-
         return *ptr;
     }
 
@@ -56,11 +52,15 @@ struct VipaOpc7
     }
 };
 
+#ifndef USE_OPC_SERVER
+#define USE_OPC_SERVER VipaOpc7
+#endif
+
 #ifdef DEMO
-typedef Server< DemoMode, VipaOpc7 > miniOPC;
+typedef Server< DemoMode, USE_OPC_SERVER > miniOPC;
 #else
 #ifdef WINDOWS
-typedef Server< WinOleMode, VipaOpc7 > miniOPC;
+typedef Server< WinOleMode, USE_OPC_SERVER > miniOPC;
 #endif
 #endif
 
