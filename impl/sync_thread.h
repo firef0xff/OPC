@@ -18,8 +18,6 @@ public:
    void Start();
    void Exec( Function func );
 
-private:
-   std::unique_ptr<Impl> mImpl;
 };
 
 

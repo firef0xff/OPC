@@ -30,7 +30,7 @@ WinOleMode::WinOleMode( wchar_t const* ServerName ):
 void WinOleMode::Init( wchar_t const* ServerName )
 {
     //подключение к серверу
-    result = CoInitialize( NULL ); //подготовка СОМ библиотек к работе
+    result = CoInitializeEx( NULL, COINIT_MULTITHREADED|COINIT_SPEED_OVER_MEMORY ); //подготовка СОМ библиотек к работе
     // получение идентификатора класса по имени сервера
     result = CLSIDFromProgID( ServerName, &clsid );
 
