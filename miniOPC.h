@@ -4,6 +4,8 @@
 #include "impl/types.h"
 #include <memory>
 #include <mutex>
+#include <map>
+#include <thread>
 
 #ifdef DEMO
 #include "impl/demo_mode.h"
@@ -19,17 +21,22 @@ template < class Impl, class NameRegistrator >
 class Server : public Impl
 {
 public:
-    static Server& Instance()
-    {
-        static std::unique_ptr< Server > ptr;
-        static std::mutex m;
-        std::lock_guard< std::mutex > lock( m );
-        if( !ptr || !ptr->Connected() )
-        {
-            ptr.reset( new Server() );
-        }
-        return *ptr;
-    }
+   static Server& Instance()
+   {
+      static std::mutex m;
+      std::lock_guard< std::mutex > lock( m );
+      auto id =std::this_thread::get_id();
+      typedef std::unique_ptr< Server > Ptr;
+      static std::map< std::thread::id, std::unique_ptr< Server > >  ptrs;
+
+      Ptr& ptr = ptrs[id];
+
+      if( !ptr || !ptr->Connected() )
+      {
+         ptr.reset( new Server() );
+      }
+      return *ptr;
+   }
 
 private:
     Server():Impl( NameRegistrator::Name() ){}
